@@ -7,17 +7,17 @@
 with tripdata as 
 (
   select *,
-    row_number() over(partition by vendorid, lpep_pickup_datetime) as rn
-  from {{ source('staging','green_tripdata') }}
-  where vendorid is not null 
+    row_number() over(partition by "VendorID", lpep_pickup_datetime) as rn
+  from {{ source('staging','green_taxies') }} td
+  where "VendorID" is not null 
 )
 select
     -- identifiers
-    {{ dbt_utils.generate_surrogate_key(['vendorid', 'lpep_pickup_datetime']) }} as tripid,
-    {{ dbt.safe_cast("vendorid", api.Column.translate_type("integer")) }} as vendorid,
-    {{ dbt.safe_cast("ratecodeid", api.Column.translate_type("integer")) }} as ratecodeid,
-    {{ dbt.safe_cast("pulocationid", api.Column.translate_type("integer")) }} as pickup_locationid,
-    {{ dbt.safe_cast("dolocationid", api.Column.translate_type("integer")) }} as dropoff_locationid,
+    {{ dbt_utils.generate_surrogate_key(['"VendorID"', 'lpep_pickup_datetime']) }} as tripid,
+    {{ dbt.safe_cast('"VendorID"', api.Column.translate_type("integer")) }} as vendorid,
+    {{ dbt.safe_cast('"RatecodeID"', api.Column.translate_type("integer")) }} as ratecodeid,
+    {{ dbt.safe_cast('"PULocationID"', api.Column.translate_type("integer")) }} as pickup_locationid,
+    {{ dbt.safe_cast('"DOLocationID"', api.Column.translate_type("integer")) }} as dropoff_locationid,
     
     -- timestamps
     cast(lpep_pickup_datetime as timestamp) as pickup_datetime,
@@ -45,8 +45,8 @@ where rn = 1
 
 
 -- dbt build --select <model_name> --vars '{'is_test_run': 'false'}'
-{% if var('is_test_run', default=true) %}
+-- {% if var('is_test_run', default=true) %}
 
-  limit 100
+--   limit 100
 
-{% endif %}
+-- {% endif %}

@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: raw_nyc_tripdata
+    database: "test"
+    schema:   "public"
+    tables:
+      - name: green_taxies
+      - name: yellow_taxies
+      - name: fhv_taxies

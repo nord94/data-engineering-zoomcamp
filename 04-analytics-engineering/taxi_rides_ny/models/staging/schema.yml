@@ -6,8 +6,9 @@ sources:
     schema: "{{ env_var('DBT_SCHEMA', 'trips_data_all') }}"
       # loaded_at_field: record_loaded_at
     tables:
-      - name: green_tripdata
-      - name: yellow_tripdata
+      - name: green_taxies
+      - name: yellow_taxies
+      - name: fhv_taxies
          # freshness:
            # error_after: {count: 6, period: hour}
 
@@ -27,7 +28,7 @@ models:
                     severity: warn
                 - not_null:
                     severity: warn
-          - name: VendorID 
+          - name: "VendorID" 
             description: > 
                 A code indicating the TPEP provider that provided the record.
                 1= Creative Mobile Technologies, LLC; 
@@ -194,3 +195,5 @@ models:
             description: Total amount of all tolls paid in trip.
           - name: Total_amount 
             description: The total amount charged to passengers. Does not include cash tips.
+      
+    - name: stg_fhv_tripdata
